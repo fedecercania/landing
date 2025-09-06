@@ -297,189 +297,7 @@ body {
     animation: pulse 3s ease-in-out infinite;
 }
 
-/* Features Section */
-.features {
-    padding: 8rem 5%;
-    background: var(--dark-gray);
-}
 
-.features-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.features-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 4rem;
-    color: var(--white);
-}
-
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 3rem;
-}
-
-.feature-card {
-    background: var(--medium-gray);
-    padding: 3rem 2rem;
-    border-radius: 20px;
-    border: 1px solid var(--light-gray);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.feature-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
-    transition: left 0.5s ease;
-}
-
-.feature-card:hover::before {
-    left: 100%;
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--primary-green);
-    box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
-}
-
-.feature-icon {
-    font-size: 3rem;
-    color: var(--primary-green);
-    margin-bottom: 1.5rem;
-}
-
-.feature-card h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--white);
-}
-
-.feature-card p {
-    color: var(--text-gray);
-    line-height: 1.6;
-}
-
-/* Progress Section */
-.progress {
-    padding: 8rem 5%;
-    background: var(--black);
-}
-
-.progress-container {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.progress h2 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 3rem;
-    color: var(--white);
-}
-
-.progress-bar {
-    position: relative;
-    width: 100%;
-    height: 8px;
-    background: var(--light-gray);
-    border-radius: 4px;
-    margin-bottom: 4rem;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: var(--gradient-green);
-    border-radius: 4px;
-    transition: width 2s ease-out;
-    animation: progressAnimation 2s ease-out;
-}
-
-.progress-text {
-    position: absolute;
-    top: -40px;
-    right: 0;
-    color: var(--primary-green);
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.timeline {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    text-align: left;
-}
-
-.timeline-item {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: var(--medium-gray);
-    border-radius: 15px;
-    border: 1px solid var(--light-gray);
-    transition: all 0.3s ease;
-}
-
-.timeline-item.completed {
-    border-color: var(--primary-green);
-    background: linear-gradient(135deg, var(--medium-gray), rgba(0, 255, 136, 0.05));
-}
-
-.timeline-item.active {
-    border-color: var(--primary-green);
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
-}
-
-.timeline-dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: var(--light-gray);
-    border: 3px solid var(--light-gray);
-    flex-shrink: 0;
-}
-
-.timeline-item.completed .timeline-dot {
-    background: var(--primary-green);
-    border-color: var(--primary-green);
-}
-
-.timeline-item.active .timeline-dot {
-    background: var(--primary-green);
-    border-color: var(--primary-green);
-    animation: pulse 2s infinite;
-}
-
-.timeline-content h4 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--white);
-    margin-bottom: 0.25rem;
-}
-
-.timeline-content span {
-    color: var(--text-gray);
-    font-size: 0.9rem;
-}
-
-.timeline-item.completed .timeline-content span {
-    color: var(--primary-green);
-}
 
 /* Footer */
 .footer {
@@ -669,10 +487,6 @@ body {
     }
 }
 
-@keyframes progressAnimation {
-    from { width: 0%; }
-    to { width: 85%; }
-}
 
 @keyframes modalSlideIn {
     from { 
@@ -744,15 +558,6 @@ body {
         font-size: 2.5rem;
     }
 
-    .features,
-    .progress {
-        padding: 4rem 4%;
-    }
-
-    .features-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
 
     .footer {
         padding: 3rem 4% 2rem;
@@ -768,13 +573,6 @@ body {
         padding: 2rem;
     }
 
-    .timeline {
-        gap: 1.5rem;
-    }
-
-    .timeline-item {
-        padding: 1rem;
-    }
 }
 
 @media (max-width: 480px) {
@@ -791,8 +589,4 @@ body {
         font-size: 1rem;
     }
 
-    .features-title,
-    .progress h2 {
-        font-size: 2rem;
-    }
 }

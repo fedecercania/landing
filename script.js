@@ -3,13 +3,11 @@ const notifyBtn = document.getElementById('notifyBtn');
 const modal = document.getElementById('notificationModal');
 const closeBtn = document.querySelector('.close');
 const notificationForm = document.getElementById('notificationForm');
-const progressFill = document.querySelector('.progress-fill');
 
 // Inicialización cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', function() {
     initializeAnimations();
     setupEventListeners();
-    animateProgressBar();
 });
 
 // Configurar event listeners
@@ -143,16 +141,6 @@ function showSuccessNotification() {
     }, 4000);
 }
 
-// Animar barra de progreso
-function animateProgressBar() {
-    if (progressFill) {
-        const targetProgress = progressFill.getAttribute('data-progress');
-        
-        setTimeout(() => {
-            progressFill.style.width = targetProgress + '%';
-        }, 500);
-    }
-}
 
 // Inicializar animaciones
 function initializeAnimations() {
@@ -210,25 +198,11 @@ function setupScrollAnimations() {
         });
     }, observerOptions);
 
-    // Observar elementos que necesitan animación
-    const animateElements = document.querySelectorAll('.feature-card, .timeline-item');
+    // Observar elementos que necesitan animación (si hay alguno en el futuro)
+    const animateElements = document.querySelectorAll('.animate-on-scroll');
     animateElements.forEach(el => observer.observe(el));
 }
 
-// Efectos de hover para las tarjetas de características
-document.addEventListener('DOMContentLoaded', function() {
-    const featureCards = document.querySelectorAll('.feature-card');
-    
-    featureCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px) scale(1.02)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-});
 
 // Efecto de partículas en el cursor (opcional)
 let particles = [];
@@ -353,43 +327,6 @@ window.addEventListener('load', function() {
     }
 });
 
-// Función para generar números aleatorios con animación
-function animateCounter(element, start, end, duration) {
-    const startTimestamp = performance.now();
-    
-    function step(timestamp) {
-        const elapsed = timestamp - startTimestamp;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        const currentValue = Math.floor(progress * (end - start) + start);
-        element.textContent = currentValue + '%';
-        
-        if (progress < 1) {
-            requestAnimationFrame(step);
-        }
-    }
-    
-    requestAnimationFrame(step);
-}
-
-// Animar contador de progreso cuando sea visible
-const progressObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const progressText = entry.target.querySelector('.progress-text');
-            if (progressText && !progressText.dataset.animated) {
-                progressText.dataset.animated = 'true';
-                animateCounter(progressText, 0, 85, 2000);
-            }
-        }
-    });
-});
-
-// Observar la sección de progreso
-const progressSection = document.querySelector('.progress');
-if (progressSection) {
-    progressObserver.observe(progressSection);
-}
 
 // Easter egg: Konami code
 let konamiSequence = [];
