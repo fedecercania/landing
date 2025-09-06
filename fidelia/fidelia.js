@@ -151,6 +151,13 @@ function revealMainPrize() {
     if (scratchOverlay) {
         scratchOverlay.style.opacity = '0';
         createConfetti(document.querySelector('.scratch-card'));
+        
+        // Resetear después de 5 segundos
+        setTimeout(() => {
+            if (scratchOverlay) {
+                scratchOverlay.style.opacity = '1';
+            }
+        }, 5000);
     }
 }
 
