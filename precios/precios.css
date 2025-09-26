@@ -310,6 +310,14 @@ body {
     color: var(--primary-green);
     font-size: 1.5rem;
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.flag {
+    font-size: 1rem;
+    margin-left: 0.25rem;
 }
 
 .amount {
