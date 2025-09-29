@@ -1,4 +1,4 @@
-// Elementos del DOM
+// Elementos del DOM - solo los que existen
 const notifyBtn = document.getElementById('notifyBtn');
 const modal = document.getElementById('notificationModal');
 const closeBtn = document.querySelector('.close');
@@ -7,22 +7,36 @@ const notificationForm = document.getElementById('notificationForm');
 // Inicialización cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', function() {
     initializeAnimations();
+    // Generar un nuevo SID de conversación por apertura de página (por sesión)
+    try {
+        const key = 'clara_conversation_sid';
+        const newSid = generateUuid();
+        sessionStorage.setItem(key, newSid);
+    } catch (_) {}
     setupEventListeners();
 });
 
 // Configurar event listeners
 function setupEventListeners() {
     // Modal de notificación
-    notifyBtn.addEventListener('click', openModal);
-    closeBtn.addEventListener('click', closeModal);
-    window.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeModal();
-        }
-    });
+    if (notifyBtn) {
+        notifyBtn.addEventListener('click', openModal);
+    }
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModal);
+    }
+    if (modal) {
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    }
 
     // Formulario de notificación
-    notificationForm.addEventListener('submit', handleNotificationSubmit);
+    if (notificationForm) {
+        notificationForm.addEventListener('submit', handleNotificationSubmit);
+    }
 
     // Smooth scrolling para navegación
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -55,37 +69,244 @@ function setupEventListeners() {
             chatWidget.style.display = 'none';
         });
     }
+
+    // Chat: manejo de envío de mensajes del usuario
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const chatBody = document.querySelector('.chat-body');
+
+    if (chatForm && chatInput && chatBody) {
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // Crear burbuja de mensaje del usuario
+            const msg = document.createElement('div');
+            msg.className = 'message user';
+            const p = document.createElement('p');
+            p.textContent = text;
+            msg.appendChild(p);
+            chatBody.appendChild(msg);
+
+            // Limpiar input y hacer scroll al final
+            chatInput.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Mostrar indicador de escritura de Clara y llamar al webhook
+            const typingEl = showClaraTyping(chatBody);
+            sendMessageToClara(text)
+                .then((replyText) => {
+                    removeClaraTyping(chatBody, typingEl);
+                    appendClaraMessage(chatBody, replyText);
+                })
+                .catch(() => {
+                    removeClaraTyping(chatBody, typingEl);
+                    appendClaraMessage(chatBody, 'Disculpa, tuve un problema al responder. ¿Podemos intentar de nuevo?');
+                });
+        });
+    }
+}
+
+// Llamar al webhook de n8n con Basic Auth y devolver texto de respuesta
+function sendMessageToClara(userText) {
+    const url = 'https://n8n.cercania.net/webhook/92093f2c-8c99-4e67-a09a-6d6ba9c60f94';
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + btoa('n8n:n8n')
+    };
+    const sid = getConversationSid();
+
+    return fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+            message: userText,
+            sid: sid,
+            payload: { message: userText, sid: sid }
+        })
+    }).then(async (res) => {
+        const contentType = res.headers.get('content-type') || '';
+        if (!res.ok) {
+            throw new Error('Bad response');
+        }
+        try {
+            if (contentType.includes('application/json')) {
+                const data = await res.json();
+                const candidate = data.reply || data.message || data.text || data.answer || '';
+                return (typeof candidate === 'string' && candidate.trim()) ? candidate : JSON.stringify(data);
+            }
+        } catch (_) {
+            // fallback a texto
+        }
+        return res.text();
+    });
+}
+
+// Obtener/generar sid persistente de la conversación
+function getConversationSid() {
+    try {
+        const key = 'clara_conversation_sid';
+        // Preferir por sesión (nuevo en cada apertura de página/ventana)
+        let sid = sessionStorage.getItem(key);
+        if (sid) return sid;
+        // Fallback si sessionStorage no disponible
+        sid = generateUuid();
+        return sid;
+    } catch (_) {
+        // Si localStorage falla, genera uno volátil
+        return generateUuid();
+    }
+}
+
+function generateUuid() {
+    if (window.crypto && window.crypto.randomUUID) {
+        return window.crypto.randomUUID();
+    }
+    // Fallback simple v4-like
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+// Mostrar indicador de escritura de Clara
+function showClaraTyping(chatBody) {
+    const typing = document.createElement('div');
+    typing.className = 'message bot typing';
+    const avatar = document.createElement('video');
+    avatar.className = 'avatar avatar-video';
+    avatar.src = 'Clara.mp4';
+    avatar.width = 40;
+    avatar.height = 40;
+    avatar.muted = true;
+    avatar.autoplay = true;
+    avatar.loop = true;
+    avatar.playsInline = true;
+    avatar.setAttribute('aria-label', 'Video de perfil de Clara');
+
+    const p = document.createElement('p');
+    p.textContent = 'Clara está escribiendo…';
+    typing.appendChild(avatar);
+    typing.appendChild(p);
+    chatBody.appendChild(typing);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return typing;
+}
+
+function removeClaraTyping(chatBody, typingEl) {
+    if (typingEl && chatBody.contains(typingEl)) {
+        chatBody.removeChild(typingEl);
+    }
+}
+
+// Agregar mensaje de Clara con avatar de video
+function appendClaraMessage(chatBody, text) {
+    const msg = document.createElement('div');
+    msg.className = 'message bot';
+
+    const avatar = document.createElement('video');
+    avatar.className = 'avatar avatar-video';
+    avatar.src = 'Clara.mp4';
+    avatar.width = 40;
+    avatar.height = 40;
+    avatar.muted = true;
+    avatar.autoplay = true;
+    avatar.loop = true;
+    avatar.playsInline = true;
+    avatar.setAttribute('aria-label', 'Video de perfil de Clara');
+
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    content.innerHTML = renderMarkdownToHtml(text);
+
+    msg.appendChild(avatar);
+    msg.appendChild(content);
+    chatBody.appendChild(msg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Utilidades de renderizado seguro (Markdown básico a HTML)
+function renderMarkdownToHtml(raw) {
+    const text = escapeHtml(raw || '');
+    // bold **text**
+    let html = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1<\/strong>');
+    // italics *text*
+    html = html.replace(/(^|\W)\*([^*]+)\*(?=\W|$)/g, '$1<em>$2<\/em>');
+    // inline code `code`
+    html = html.replace(/`([^`]+)`/g, '<code>$1<\/code>');
+    // simple lists: lines starting with - or * or numbers
+    html = html.replace(/(?:^|\n)(?:\s*)([-*])\s+(.+)(?=\n|$)/g, function(_, bullet, item){
+        return `\n<li>${item}<\/li>`;
+    });
+    // wrap consecutive <li> into <ul>
+    html = html.replace(/(?:<li>[\s\S]*?<\/li>)(?:(?:\n)?<li>[\s\S]*?<\/li>)*/g, function(list){
+        const items = list.replace(/\n/g, '');
+        return `<ul>${items}<\/ul>`;
+    });
+    // paragraphs: convert double newlines into <p>
+    const blocks = html.split(/\n\n+/).map(b => b.trim()).filter(Boolean);
+    html = blocks.map(b => {
+        // if already a block element
+        if (b.startsWith('<ul>') || b.startsWith('<ol>')) return b;
+        return `<p>${b}<\/p>`;
+    }).join('');
+    // line breaks
+    html = html.replace(/\n/g, '<br/>');
+    return html;
+}
+
+function escapeHtml(s) {
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 // Abrir modal
 function openModal() {
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-    
-    // Animación de entrada
-    const modalContent = modal.querySelector('.modal-content');
-    modalContent.style.animation = 'modalSlideIn 0.3s ease-out';
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        
+        // Animación de entrada
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.style.animation = 'modalSlideIn 0.3s ease-out';
+        }
+    }
 }
 
 // Cerrar modal
 function closeModal() {
-    const modalContent = modal.querySelector('.modal-content');
-    modalContent.style.animation = 'modalSlideOut 0.3s ease-out';
-    
-    setTimeout(() => {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }, 300);
+    if (modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.style.animation = 'modalSlideOut 0.3s ease-out';
+        }
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }, 300);
+    }
 }
 
 // Manejar envío del formulario
 function handleNotificationSubmit(e) {
     e.preventDefault();
     
-    const email = e.target.querySelector('input[type="email"]').value;
+    const emailInput = e.target.querySelector('input[type="email"]');
+    if (!emailInput) return;
+    
+    const email = emailInput.value;
     
     // Simular envío
     const submitBtn = e.target.querySelector('button');
+    if (!submitBtn) return;
+    
     const originalText = submitBtn.textContent;
     
     submitBtn.textContent = 'Enviando...';

@@ -610,6 +610,25 @@ body {
     flex-direction: column;
 }
 
+/* Anchos mayores en pantallas grandes */
+@media (min-width: 1280px) {
+    .chat-widget {
+        width: 520px;
+    }
+}
+
+@media (min-width: 1536px) {
+    .chat-widget {
+        width: 600px;
+    }
+}
+
+@media (min-width: 1920px) {
+    .chat-widget {
+        width: 680px;
+    }
+}
+
 .chat-header {
     display: flex;
     align-items: center;
@@ -640,9 +659,21 @@ body {
     overflow-y: auto;
     flex: 1;
     min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    max-width: 85%;
 }
 
 .message.bot {
+    align-self: flex-start;
     background: rgba(0, 255, 136, 0.08);
     border: 1px solid rgba(0, 255, 136, 0.25);
     color: var(--white);
@@ -650,13 +681,82 @@ body {
     border-radius: 12px;
     line-height: 1.5;
     font-size: 0.95rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+    background: var(--primary-green);
+    color: var(--black);
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 255, 136, 0.2);
 }
 
 .message.bot p {
     margin: 0;
+}
+
+.message.user p {
+    margin: 0;
+}
+
+/* Contenido enriquecido de mensajes (Clara) */
+.message-content {
+    background: transparent;
+    padding: 0;
+}
+
+.message.bot .message-content p {
+    margin: 0.25rem 0;
+}
+
+.message.bot .message-content strong {
+    color: var(--primary-green);
+}
+
+.message.bot .message-content em {
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.message.bot .message-content code {
+    background: rgba(255,255,255,0.08);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.9em;
+}
+
+.message.bot .message-content ul {
+    margin: 0.25rem 0 0.25rem 1.25rem;
+    padding: 0;
+    list-style: disc;
+}
+
+.message.bot .message-content li {
+    margin: 0.2rem 0;
+}
+
+/* Animaciones para mensajes */
+.message {
+    animation: messageSlideIn 0.3s ease-out;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .avatar-video {
@@ -713,6 +813,12 @@ body {
     height: 42px;
     border-radius: 50%;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#chatSend:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
 }
 
 #chatSend i {
