@@ -16,10 +16,7 @@
                 <i class="fas fa-satellite-dish"></i>
                 <span>Cercan.ia</span>
             </div>
-            <nav class="nav">
-                <a href="fidelia/">Fidelización</a>
-                <a href="#contact">Contacto</a>
-            </nav>
+            
         </header>
 
         <!-- Main Content -->
@@ -28,24 +25,24 @@
                 <div class="hero-content">
                     <div class="status-indicator">
                         <div class="pulse-dot"></div>
-                        <span>En desarrollo</span>
+                        <span>Ya llegamos</span>
                     </div>
                     
                     <h1 class="title">
                         <span class="title-line">Cercan.ia</span>
-                        <span class="title-line subtitle">ya casi llega</span>
+                        <span class="title-line subtitle">ya llegó</span>
                     </h1>
                     
                     <p class="description">
-                        Estamos trabajando en algo increíble. Una plataforma que conectará y transformará la forma en que interactúas con la tecnología.
+                        Somos IA que acerca a los comercios a sus sueños.
                     </p>
                     
                     <div class="cta-section">
                         <button class="cta-button" id="notifyBtn">
                             <i class="fas fa-bell"></i>
-                            Notificarme cuando esté listo
+                            Charla con nosotros
                         </button>
-                        <p class="cta-text">Sé el primero en conocer cuando lancemos</p>
+                        <p class="cta-text">Conversemos y acerquemos tu comercio a sus sueños</p>
                     </div>
                 </div>
                 
@@ -70,35 +67,6 @@
             </div>
         </main>
 
-
-
-        <!-- Footer -->
-        <footer class="footer" id="contact">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <i class="fas fa-satellite-dish"></i>
-                        <span>Cercan.ia</span>
-                    </div>
-                    <p>Innovación que está por llegar</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Síguenos</h4>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Contacto</h4>
-                    <p>contacto@cercania.net</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Cercan.ia. Todos los derechos reservados.</p>
-            </div>
-        </footer>
     </div>
 
     <!-- Notification Modal -->
@@ -109,6 +77,26 @@
             <form class="notification-form" id="notificationForm">
                 <input type="email" placeholder="tu@email.com" required>
                 <button type="submit">Suscribirme</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget" id="chatWidget" aria-live="polite">
+        <div class="chat-header">
+            <span><i class="fas fa-comments"></i> Chat</span>
+            <button class="chat-toggle" id="chatClose" aria-label="Cerrar">&times;</button>
+        </div>
+        <div class="chat-body">
+            <div class="message bot">
+                <video class="avatar avatar-video" src="Clara.mp4" width="40" height="40" muted autoplay loop playsinline aria-label="Video de perfil de Clara"></video>
+                <p>Hola, soy Clara de Cercan.ia. Un gusto! Soy un sistema impulsado por Inteligencia Artificial que automatiza procesos clave de tu negocio de forma proactiva y a través de una simples charla! ¿Qué te trae por acá hoy?</p>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <form id="chatForm" class="chat-form" autocomplete="off">
+                <input id="chatInput" type="text" placeholder="Escribe tu mensaje..." aria-label="Mensaje" required>
+                <button type="submit" id="chatSend" aria-label="Enviar"><i class="fas fa-paper-plane"></i></button>
             </form>
         </div>
     </div>

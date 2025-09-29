@@ -43,6 +43,18 @@ function setupEventListeners() {
     
     // Intersection Observer para animaciones al hacer scroll
     setupScrollAnimations();
+
+    // Chat widget: abrir por defecto y permitir cerrar
+    const chatWidget = document.getElementById('chatWidget');
+    const chatClose = document.getElementById('chatClose');
+    if (chatWidget) {
+        chatWidget.style.display = 'flex';
+    }
+    if (chatClose && chatWidget) {
+        chatClose.addEventListener('click', function() {
+            chatWidget.style.display = 'none';
+        });
+    }
 }
 
 // Abrir modal
