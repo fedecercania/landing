@@ -18,9 +18,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Configurar event listeners
 function setupEventListeners() {
-    // Modal de notificación
+    // CTA principal: hacer temblar el chat y abrirlo (no abrir modal)
     if (notifyBtn) {
-        notifyBtn.addEventListener('click', openModal);
+        notifyBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const chatWidget = document.getElementById('chatWidget');
+            if (chatWidget) {
+                chatWidget.style.display = 'flex';
+                chatWidget.classList.remove('shake');
+                // forzar reflow para reiniciar animación
+                void chatWidget.offsetWidth;
+                chatWidget.classList.add('shake');
+                setTimeout(() => chatWidget.classList.remove('shake'), 700);
+                // enfocar input de chat
+                const input = document.getElementById('chatInput');
+                if (input) {
+                    setTimeout(() => input.focus(), 0);
+                }
+            }
+        });
     }
     if (closeBtn) {
         closeBtn.addEventListener('click', closeModal);
