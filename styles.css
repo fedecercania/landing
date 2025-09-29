@@ -759,6 +759,17 @@ body {
     margin: 0.2rem 0;
 }
 
+/* Resaltados en mensaje de bienvenida */
+.highlight-clara {
+    color: #4fc3f7;
+    font-weight: 600;
+}
+
+.highlight-cercania {
+    color: var(--primary-green);
+    font-weight: 600;
+}
+
 /* Animaciones para mensajes */
 .message {
     animation: messageSlideIn 0.3s ease-out;
