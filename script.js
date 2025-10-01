@@ -7,12 +7,6 @@ const notificationForm = document.getElementById('notificationForm');
 // Inicialización cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', function() {
     initializeAnimations();
-    // Generar un nuevo SID de conversación por apertura de página (por sesión)
-    try {
-        const key = 'clara_conversation_sid';
-        const newSid = generateUuid();
-        sessionStorage.setItem(key, newSid);
-    } catch (_) {}
     setupEventListeners();
 });
 
@@ -163,11 +157,12 @@ function sendMessageToClara(userText) {
 function getConversationSid() {
     try {
         const key = 'clara_conversation_sid';
-        // Preferir por sesión (nuevo en cada apertura de página/ventana)
+        // Mantener un SID estable durante toda la sesión del navegador
         let sid = sessionStorage.getItem(key);
-        if (sid) return sid;
-        // Fallback si sessionStorage no disponible
-        sid = generateUuid();
+        if (!sid) {
+            sid = generateUuid();
+            sessionStorage.setItem(key, sid);
+        }
         return sid;
     } catch (_) {
         // Si localStorage falla, genera uno volátil
