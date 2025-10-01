@@ -245,8 +245,10 @@ function appendClaraMessage(chatBody, text) {
 // Utilidades de renderizado seguro (Markdown básico a HTML)
 function renderMarkdownToHtml(raw) {
     const text = escapeHtml(raw || '');
+    // links [text](url)
+    let html = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1<\/a>');
     // bold **text**
-    let html = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1<\/strong>');
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1<\/strong>');
     // italics *text*
     html = html.replace(/(^|\W)\*([^*]+)\*(?=\W|$)/g, '$1<em>$2<\/em>');
     // inline code `code`

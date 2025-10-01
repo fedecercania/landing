@@ -732,6 +732,11 @@ body {
     margin: 0.25rem 0;
 }
 
+.message.bot .message-content a {
+    color: var(--primary-green);
+    text-decoration: underline;
+}
+
 .message.bot .message-content strong {
     color: var(--primary-green);
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas - Cercan.ia</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .reservas-wrapper { max-width: 800px; margin: 0 auto; padding: 3rem 5% 5rem; }
+        .reservas-card { background: var(--medium-gray); border: 1px solid var(--light-gray); border-radius: 16px; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .reservas-title { color: var(--white); font-size: 1.75rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .reservas-desc { color: var(--text-gray); margin-bottom: 1.25rem; line-height: 1.7; }
+        .reservas-actions { display: flex; gap: 1rem; align-items: center; }
+        .btn-primary { background: var(--gradient-green); color: var(--black); border: none; padding: 0.9rem 1.4rem; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+        .btn-secondary { background: transparent; color: var(--white); border: 1px solid var(--light-gray); padding: 0.9rem 1.2rem; border-radius: 10px; text-decoration: none; }
+        .note { margin-top: 1rem; color: var(--text-gray); font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <main class="reservas-wrapper">
+            <div class="reservas-card">
+                <h1 class="reservas-title">Reservar una charla</h1>
+                <p class="reservas-desc">Para proteger tu seguridad, Google no permite embeber esta página dentro de otros sitios. Abriremos el calendario de reservas en una nueva pestaña.</p>
+                <div class="reservas-actions">
+                    <a class="btn-primary" href="https://calendar.app.google/dFpTvzDyuEApV7pu8" target="_blank" rel="noopener noreferrer">Abrir calendario</a>
+                    <a class="btn-secondary" href="/">Volver al inicio</a>
+                </div>
+                <p class="note">Si el enlace no abre, copia y pega esta URL en tu navegador: <span style="color: var(--primary-green); word-break: break-all;">https://calendar.app.google/dFpTvzDyuEApV7pu8</span></p>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
